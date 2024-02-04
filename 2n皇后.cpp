@@ -1,3 +1,4 @@
+//question description:2 queens-black one and white one,the same row\column\cross is not permitted.
 #include <stdio.h>
 #include <string.h>
 #define MAXN 10

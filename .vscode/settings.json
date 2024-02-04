@@ -1,0 +1,7 @@
+{
+"python.pythonPath": "E:\\Python\\python.exe",
+"python.linting.pylintEnabled": false,
+"python.linting.pep8Enabled": true,
+"python.linting.lintOnSave": true,
+"python.formatting.provider": "yapf"
+}

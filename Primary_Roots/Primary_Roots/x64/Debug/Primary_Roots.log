@@ -1,0 +1,8 @@
+﻿  pri_roots.cpp
+D:\Study\C++\Primary_Roots\Primary_Roots\mod.h(145,14): warning C4244: “参数”: 从“__int64”转换到“int”，可能丢失数据
+D:\Study\C++\Primary_Roots\Primary_Roots\mod.h(173,29): warning C4244: “参数”: 从“__int64”转换到“int”，可能丢失数据
+D:\Study\C++\Primary_Roots\Primary_Roots\mod.h(223,11): warning C4244: “参数”: 从“__int64”转换到“int”，可能丢失数据
+D:\Study\C++\Primary_Roots\Primary_Roots\mod.h(228,13): warning C4244: “参数”: 从“__int64”转换到“int”，可能丢失数据
+D:\Study\C++\Primary_Roots\Primary_Roots\mod.h(260,24): warning C4244: “参数”: 从“__int64”转换到“int”，可能丢失数据
+D:\Study\C++\Primary_Roots\Primary_Roots\mod.h(163): warning C4715: “One_Pri_Roots”: 不是所有的控件路径都返回值
+  Primary_Roots.vcxproj -> D:\Study\C++\Primary_Roots\x64\Debug\Primary_Roots.exe

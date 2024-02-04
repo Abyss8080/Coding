@@ -1,0 +1,207 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include<easyx.h>
+#include<graphics.h>
+#include<conio.h>
+#include<windows.h>
+#include <mmsystem.h>//导入声音头文件 
+#pragma comment(lib,"winmm.lib")//导入声音头文件库
+#pragma warning (disable:4699)
+#define M 15
+#define B 40
+#define IMGW 50
+
+void initmap(int map[M][M]);
+void drawmap(int map[M][M], IMAGE pic[11]);
+void mouseEvent(ExMessage *msg,int map[M][M], IMAGE pic[11]);
+void judge(ExMessage *mouse, int map[M][M],IMAGE pic[11]);
+void showmapnumber(int map[M][M]);
+void opennull(int map[M][M], int x, int y);
+bool isprime = true;
+
+int main() {
+	int map[M][M] = { 0 };
+	IMAGE pic[11];
+	IMAGE picture[6];
+	ExMessage mouse;
+	//鼠标消息结构(获取坐标)
+
+    initgraph(IMGW * M,IMGW * M, EW_SHOWCONSOLE);
+    
+	//加载图片
+	loadimage(&pic[0], "images/0.jpg", IMGW, IMGW);
+	loadimage(&pic[1], "images/1.jpg", IMGW, IMGW);
+	loadimage(&pic[2], "images/2.jpg", IMGW, IMGW);
+	loadimage(&pic[3], "images/3.jpg", IMGW, IMGW);
+	loadimage(&pic[4], "images/4.jpg", IMGW, IMGW);
+	loadimage(&pic[5], "images/5.jpg", IMGW, IMGW);
+	loadimage(&pic[6], "images/6.jpg", IMGW, IMGW);
+	loadimage(&pic[7], "images/7.jpg", IMGW, IMGW);
+	loadimage(&pic[8], "images/8.jpg", IMGW, IMGW);
+	loadimage(&pic[9], "images/9.jpg", IMGW, IMGW);
+	loadimage(&pic[10], "images/10.png", IMGW, IMGW);
+
+	initmap(map);
+	showmapnumber(map);
+	while (true) {
+        drawmap(map, pic);
+	    mouseEvent(&mouse, map, pic);
+	    if (!isprime) {
+		    int ret = MessageBox(GetHWnd(), (LPCSTR)"你英勇就义，再试一次？", (LPCSTR)"Hint", MB_OKCANCEL);
+		    if (ret == IDOK) {
+			initmap(map);
+			drawmap(map, pic);
+			isprime = true;
+		    }
+		    else {
+			    exit(1);
+		    }
+	    }
+	}
+	getchar(); 
+	system("PAUSE");
+	return 0;
+}
+
+//初始化且掩盖
+void initmap(int map[M][M]) {
+	//避免反复利用时上次的数据没有清空
+	memset(map, 0, M * M * sizeof(int));
+
+    //生成B个雷
+	srand((unsigned)time(NULL));
+	int x, y;
+	for (int i = 0; i < B; ) {
+		x = rand() % M;
+		y = rand() % M;
+		if (map[y][x] == 0) {
+			map[y][x] = -1;
+	        i++;
+		}
+			
+	}
+	
+	//生成地图
+	for (int i = 0; i < M; ++i) {
+		for (int j = 0; j < M; ++j) {
+			if (map[i][j] == -1) {
+				for (int m = i - 1; m <= i + 1; ++m) {
+					for (int n = j - 1; n <= j + 1; ++n) {
+						if (m >= 0 && m < M && n >= 0 && n < M && map[m][n] != -1)
+							++map[m][n];
+					}
+				}
+			}
+		}
+	}
+
+	//掩盖加密
+	for (int i = 0; i < M; ++i) {
+		for (int j = 0; j < M; ++j) {
+			map[i][j] += 100;
+		}
+	}
+}
+
+//前面已经加载了图片，现在要贴图
+void drawmap(int map[M][M],IMAGE pic[11]) {
+	for (int i = 0; i < M; ++i) {
+		for (int j = 0; j < M; ++j) {
+			if(map[i][j]==-1){
+				putimage(j * IMGW, i * IMGW,&pic[10]);
+			}
+			else if (map[i][j] >= 0 && map[i][j] <= 8) {
+				putimage(j * IMGW, i * IMGW, pic + map[i][j]);
+			}
+			else {
+				putimage(j * IMGW, i * IMGW, &pic[9]);
+			}
+		}
+	}
+}
+
+//得到鼠标点击的数据
+void mouseEvent(ExMessage* msg, int map[M][M], IMAGE pic[11]) {
+	if (peekmessage(msg, EM_MOUSE)) 
+	{
+		int i = msg->y / IMGW;
+		int j = msg->x / IMGW;
+		if (msg->message == WM_LBUTTONDOWN) {
+			if (map[i][j] >= 99 && map[i][j] <= 108) {
+				map[i][j] -= 100;
+				opennull(map, j, i);
+				showmapnumber(map);	
+				judge(msg, map,pic);
+				drawmap(map, pic);
+			}
+		}
+	}
+}
+
+//判断游戏是否结束
+void judge(ExMessage *mouse,int map[M][M],IMAGE pic[11]) {
+	int i = mouse->y / IMGW;
+	int j = mouse->x / IMGW;
+	int point = 0;
+
+	if (map[i][j] == -1) {
+		for (int x = 0; x < M; ++x) {
+			for (int y = 0; y < M; ++y) {
+				if (map[x][y] == 99) {
+					map[x][y] -= 100;
+					//显示所有的地雷
+					isprime = false;
+					PlaySound(TEXT("music/explosion.wav"), NULL, SND_FILENAME | SND_ASYNC);
+
+				}
+			}
+		}
+	}
+
+	//怎么赢
+	for (int m = 0; m < M; ++m) {
+		for (int n = 0; n < M; ++n) {
+			if (map[m][n] >= 0 && map[m][n] <= 8) {
+				++point;
+			}
+		}
+	}
+	if (point == M * M - B) {
+		PlaySound(TEXT("music/win.wav"), NULL, SND_FILENAME | SND_ASYNC);
+		drawmap(map, pic);
+		int ret=MessageBox(GetHWnd(), (LPCSTR)"你完成任务，恭喜通关！\n再次接受任务？", (LPCSTR)"Hint", MB_OKCANCEL);
+		if (ret == IDOK) {
+			initmap(map);
+			drawmap(map, pic);
+		}
+		else {
+			exit(1);
+		}
+	}
+}
+
+//显示数组数据
+void showmapnumber(int map[M][M]) {
+	for (int i = 0; i < M; ++i) {
+		for (int j = 0; j < M; ++j) {
+			printf("%5d", map[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+}
+
+//打开临近的非地雷格,(x,y)
+void opennull(int map[M][M], int x, int y) {
+	if (map[y][x] == 0) {
+		for (int i = y - 1; i <= y + 1; ++i) {
+			for (int j = x - 1; j <= x + 1; ++j) {
+				if (i >= 0 && i < M && j >= 0 && j < M && map[i][j] >=99 && map[i][j] <= 108) {
+					map[i][j] -= 100;
+					opennull(map, j, i);
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,20 @@
+﻿RSArealization.obj : error LNK2005: "void __cdecl Decode(void)" (?Decode@@YAXXZ) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "void __cdecl Encrypt(void)" (?Encrypt@@YAXXZ) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "void __cdecl Find_prime(void)" (?Find_prime@@YAXXZ) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "int __cdecl Lengendre(void)" (?Lengendre@@YAHXZ) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "__int64 __cdecl Mod(int,__int64,__int64)" (?Mod@@YA_JH_J0@Z) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "int __cdecl changeM(__int64)" (?changeM@@YAH_J@Z) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "void __cdecl create_keys(void)" (?create_keys@@YAXXZ) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "__int64 __cdecl get_d(__int64)" (?get_d@@YA_J_J@Z) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "__int64 __cdecl get_e(__int64)" (?get_e@@YA_J_J@Z) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "__int64 __cdecl get_gcd(__int64,__int64)" (?get_gcd@@YA_J_J0@Z) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "bool __cdecl is_positive_prime(__int64)" (?is_positive_prime@@YA_N_J@Z) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "__int64 __cdecl pow(__int64,int)" (?pow@@YA_J_JH@Z) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "__int64 __cdecl sqrt(__int64)" (?sqrt@@YA_J_J@Z) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: main 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "int * Mdouble" (?Mdouble@@3PAHA) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "char * Prime" (?Prime@@3PADA) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "__int64 E" (?E@@3_JA) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "__int64 N" (?N@@3_JA) 已经在 Lengendre.obj 中定义
+RSArealization.obj : error LNK2005: "__int64 D" (?D@@3_JA) 已经在 Lengendre.obj 中定义
+D:\Study\C++\RSA\x64\Debug\RSA.exe : fatal error LNK1169: 找到一个或多个多重定义的符号

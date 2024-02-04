@@ -1,0 +1,4 @@
+﻿  L_J.cpp
+D:\Study\C++\Lengendre_Jacobi\Lengendre_Jacobi\mod.h(168,29): warning C4244: “参数”: 从“__int64”转换到“int”，可能丢失数据
+D:\Study\C++\Lengendre_Jacobi\Lengendre_Jacobi\mod.h(229): warning C4715: “Jacobi”: 不是所有的控件路径都返回值
+  Lengendre_Jacobi.vcxproj -> D:\Study\C++\Lengendre_Jacobi\x64\Debug\Lengendre_Jacobi.exe

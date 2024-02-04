@@ -1,0 +1,5 @@
+﻿  R_M.cpp
+D:\Study\C++\Rabin-Miler\Rabin-Miler\mod.h(117,35): warning C4244: “参数”: 从“__int64”转换到“int”，可能丢失数据
+D:\Study\C++\Rabin-Miler\Rabin-Miler\mod.h(126,18): warning C4244: “参数”: 从“__int64”转换到“int”，可能丢失数据
+D:\Study\C++\Rabin-Miler\Rabin-Miler\mod.h(108,25): warning C4101: “temp”: 未引用的局部变量
+  Rabin-Miler.vcxproj -> D:\Study\C++\Rabin-Miler\x64\Debug\Rabin-Miler.exe

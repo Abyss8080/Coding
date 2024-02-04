@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "9ff0026a-da14-4a55-8bdc-3d01dc25e63d": {
+      "ProjectGuid": "9ff0026a-da14-4a55-8bdc-3d01dc25e63d",
+      "DisplayName": "售卖冰淇淋",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

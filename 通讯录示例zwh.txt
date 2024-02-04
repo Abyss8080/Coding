@@ -1,0 +1,286 @@
+//通讯录代码示例
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+
+
+#define FILENAME "maillist"
+
+typedef struct person {
+	char name[20];
+	//姓名
+	char address[40];
+	//地址
+	char zip[30];
+	//邮编
+	char phone[15];
+	//电话号码
+} PERSON;
+
+typedef struct address {
+	char name[20];
+	//姓名
+	char address[40];
+	//地址
+	char zip[30];
+	//邮编
+	char phone[15];
+	//电话号码
+	struct address *next;
+} ADDRESS;
+typedef ADDRESS *AD_LIST;
+//把地址结构的指针改名叫AD_LIST
+
+AD_LIST load(void);
+int menu_select(void);
+AD_LIST insert(AD_LIST head);
+void show(AD_LIST head);
+void find(AD_LIST head);
+AD_LIST delectenode(AD_LIST head);
+void save(AD_LIST head);
+
+int main() {
+	AD_LIST head;
+	//通讯录头指针；
+	char choice;
+
+	head = load();
+	for (;;) {
+		choice = menu_select();
+		switch (choice) {
+			case 1:
+				head = insert(head);
+				break;
+			case 2:
+				show(head);
+				break;
+			case 3:
+				find(head);
+				break;
+			case 4:
+				head = delectenode(head);
+				break;
+			case 5:
+				save(head);
+				break;
+			case 6:
+				return 0;
+		}
+	}
+	return 0;
+}
+
+int menu_select(void) {
+	//给出菜单可选操作
+	char s[80];
+	int c;
+
+	printf("\t\t    通讯录管理系统\n");
+	printf("\t\t========================\n");
+	printf("\t\t    1.插入一条记录\n");
+	printf("\t\t    2.显示所有记录\n");
+	printf("\t\t    3.按姓名查找\n");
+	printf("\t\t    4.按姓名删除\n");
+	printf("\t\t    5.存盘\n");
+	printf("\t\t    6.退出\n");
+
+	do {
+		printf("\n\n\t请选择（~6）：");
+		gets(s);
+		printf("\n");
+		c = atoi(s);
+		//atoi是把字符串转换成十进制整型的函数，空的话返回0,过大的话返回-1
+		//int atoi (const char *nptr)
+	} while (c < 0 || c > 6);
+
+	return c;
+}
+
+
+AD_LIST load(void) {
+	//下载一个通讯录文件
+	AD_LIST p, q, head;
+	PERSON per;
+	FILE *fp;
+	q = head = NULL;
+	if ((fp = fopen(FILENAME, "rb")) == NULL) {
+		printf("Can not open file %s\n", FILENAME);
+		return head;
+	} else {
+		while (!feof(fp))
+			//文件没有结束
+			if (fread(&per, sizeof(PERSON), 1, fp) == 1) {
+				//每次读一个PERSON的数据，即读4个字符串（遇到空格或换行符视为读完一个字符串） 
+				//读取成功
+				p = (AD_LIST)malloc(sizeof(ADDRESS));
+
+				strcpy(p->name, per.name);
+				strcpy(p->address, per.address);
+				strcpy(p->zip, per.zip);
+				strcpy(p->phone, per.phone);
+
+				head = p;
+				p->next = q;
+				q = head;
+			}
+		fclose(fp);
+		return head;
+	}
+}
+AD_LIST insertsort(AD_LIST head, AD_LIST temp){
+	if(head == NULL){
+		head = temp;
+		return head;
+	}
+	AD_LIST p,q;
+	p = q = head;
+	while(p!=NULL){
+		if(strcmp(temp->name, p->name) < 0){
+			if(head == p){
+				temp->next = head;
+				head = temp;
+			}
+			else{
+				temp->next = p;
+				q->next = temp;
+			}
+			return head;
+		}
+		q = p;
+		p = p->next;
+	}
+	q->next = temp;
+	return head;
+}
+AD_LIST insert(AD_LIST head) {
+	//输入一个新的记录
+		AD_LIST temp, p;
+
+		p = head;
+		temp = (AD_LIST)malloc(sizeof(ADDRESS));
+
+		printf("\n\t请输入姓名:");
+		gets(temp->name);
+		printf("\n\t请输入通信地址:");
+		gets(temp->address);
+		fflush(stdin);
+		printf("\n\t请输入邮编地址:");
+		gets(temp->zip);
+		fflush(stdin);
+		printf("\n\t请输入电话号码:");
+		gets(temp->phone);
+		fflush(stdin);
+		temp->next = NULL;
+		
+		/*head = temp;
+		temp->next = p;
+		return head;*/
+		return insertsort(head,temp);
+}
+
+void save(AD_LIST head) {
+	//保存输入的通讯录地址
+	AD_LIST p;
+	FILE *fp;
+	PERSON per;
+
+	if ((fp = fopen(FILENAME, "wb")) == NULL) {
+		printf("Can not open file %s\n", FILENAME);
+		return ;
+		//因为返回的类型是void
+	} else {
+		p = head;
+		while (p != NULL) {
+			strcpy(per.name, p->name );
+			strcpy(per.address, p->address );
+			strcpy(per.zip,p->zip);
+			strcpy(per.phone, p->phone );
+
+			if (fwrite(&per, sizeof(PERSON), 1, fp) != 1)
+			//每次写一个PERSON的数据，即写4个字符串（4个字符串中间以空格分开）
+				printf("FILE write error.\n");
+
+			p = p->next;
+		}
+		fclose(fp);
+	}
+}
+
+
+void show(AD_LIST head) {
+	//显示通讯录
+	AD_LIST p;
+	p = head;
+
+	printf("%-30s%-40s%-20s%-20s\n", "姓名", "地址", "邮编", "电话号码");
+	while (p != NULL) {
+		printf("%-30s", p->name);
+		printf("%-40s", p->address);
+		printf("%-20s", p->zip);
+		printf("%-20s\n", p->phone);
+
+		p = p->next;
+	}
+}
+
+
+void find(AD_LIST head) {
+	//找到一个通讯录记录
+	AD_LIST p;
+	char name[20];
+	int flag = 0;
+
+	printf("请输入要查找的人的姓名：");
+	gets(name);
+
+	p = head;
+	while (p != NULL) {
+		if (strcmp(name, p->name) == 0) {
+			printf("Name:%s\n", p->name);
+			printf("Address:%s\n", p->address);
+			printf("Zip:%s\n", p->zip);
+			printf("Phone:%s\n", p->phone);
+			flag = 1;
+
+		}
+		p = p->next;
+	}
+	if (flag == 0) {
+		printf("\n\t\t查无此人\n\n");
+	}
+}
+
+
+AD_LIST delectenode(AD_LIST head) {
+	//删除一个通讯录记录
+	AD_LIST  q, p;
+	char name[20];
+	int flag = 0;
+
+	printf("请输入想删除的人的姓名：");
+	gets(name);
+
+	p = q = head;
+	int f = 0;
+	while (p != NULL) {
+		if (strcmp(name, p->name) == 0) {
+			if (head == p)
+				head = p->next;
+			else
+				q->next = p->next;
+
+			free(p);
+			
+			p = q->next;
+
+			flag = 1;
+		} else {
+			q = p;
+			p = p->next;
+		}
+	}
+	if (flag == 0)
+		printf("\n\t\t查无此人\n\n");
+
+	return head;
